@@ -1,81 +1,168 @@
 import React from 'react';
-import {
-	AreaChart,
-	Area,
-	XAxis,
-	YAxis,
-	CartesianGrid,
-	Tooltip,
-	Legend,
-	ResponsiveContainer
-} from 'recharts';
-import { CustomizedAxisTick } from './xtick';
+import ReactEcharts from 'echarts-for-react'
 
 export const DailyInfected = ({ finalData }) => {
+
+	const extractDataToList = (data) => {
+		const res = []
+		for (let i in finalData) {
+			res.push(finalData[i][data])
+		}
+		return res
+	}
+
+	const dates = extractDataToList('date')
+	const dailyInfected = extractDataToList('dailyInfected')
+	const newTests = extractDataToList('newTests')
+
+	const options = {
+		tooltip: {
+			trigger: 'axis',
+			axisPointer: {
+				label: {
+					backgroundColor: '#6a7985'
+				}
+			}
+		},
+		legend: {
+			data: [ 'Infectări zilnice' ]
+		},
+		grid: {
+			left: '3%',
+			right: '4%',
+			bottom: '3%',
+			containLabel: true
+		},
+		xAxis: {
+			type: 'category',
+			data: dates,
+			axisLabel: {
+				color: 'gray',
+				fontWeight: 'bold',
+				rotate: 90,
+				interval: 6,
+			},
+		 },
+		yAxis: {
+			type: 'value',
+			axisLabel: {
+				color: 'gray',
+				inside: true
+			},
+		},
+		series: [
+			{
+				name: 'Infectări per zi',
+				type: 'line',
+				smooth: true,
+				data: dailyInfected,
+				areaStyle: {},
+				symbol: 'none',
+				color: '#FF0000'
+			},
+		]
+	};
+
 	return (
 		<React.Fragment>
-			<h2>Infected per day</h2>
-			<ResponsiveContainer width="99%" aspect={3}>
-				<AreaChart
-					style={{ margin: '6rem auto' }}
-					width={1400}
-					height={600}
-					data={finalData}
-					margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-				>
-					<XAxis dataKey="date" tick={<CustomizedAxisTick />} />
-					<YAxis domain={[0, 600]} mirror={true} />
-					<CartesianGrid strokeDasharray="3 3" />
-					<Tooltip />
-					<Legend verticalAlign={'top'} />
-					<Area
-						type="monotone"
-						dataKey="dailyInfected"
-						dot={false}
-						stroke="#FF0000"
-						fill="#FF0000"
-						activeDot={{ r: 8 }}
-					/>
-				</AreaChart>
-			</ResponsiveContainer>
+			<h2>Infectări zilnice</h2>
+			<ReactEcharts
+              style={{
+                height: '500px',
+                width: '100%'
+              }}
+              option={ options }
+            //   theme={SUMMARY_CHART_THEME}
+            />
 		</React.Fragment>
 	);
 };
 
 export const DailyTestedInfected = ({ finalData }) => {
+
+	const extractDataToList = (data) => {
+		const res = []
+		for (let i in finalData) {
+			res.push(finalData[i][data])
+		}
+		return res
+	}
+
+	const dates = extractDataToList('date')
+	const dailyInfected = extractDataToList('dailyInfected')
+	const newTests = extractDataToList('newTests')
+
+	const options = {
+		tooltip: {
+			trigger: 'axis',
+			axisPointer: {
+				label: {
+					backgroundColor: '#6a7985'
+				}
+			}
+		},
+		legend: {
+			data: [ 'Teste noi', 'Infectați per zi' ]
+		},
+		grid: {
+			left: '3%',
+			right: '4%',
+			bottom: '3%',
+			containLabel: true
+		},
+		xAxis: {
+			type: 'category',
+			data: dates,
+			axisLabel: {
+				color: 'gray',
+				fontWeight: 'bold',
+				rotate: 90,
+				interval: 6,
+			},
+		 },
+		yAxis: {
+			type: 'value',
+			axisLabel: {
+				color: 'gray',
+				inside: true
+			},
+		},
+		series: [
+			{
+				name: 'Infectați per zi',
+				type: 'line',
+				smooth: true,
+				data: dailyInfected,
+				areaStyle: {},
+				symbol: 'none',
+				color: '#FF0000',
+				stack: 'one',
+			},
+			{
+				name: 'Teste noi',
+				type: 'line',
+				smooth: true,
+				data: newTests,
+				areaStyle: {},
+				symbol: 'none',
+				color: '#ffa500',
+				stack: 'one'
+			},
+		]
+	};
+
 	return (
 		<React.Fragment>
-			<h2>Daily: tested vs. infected</h2>
-			<ResponsiveContainer width="99%" aspect={3}>
-				<AreaChart
-					style={{ margin: '6rem auto' }}
-					width={1400}
-					height={600}
-					data={finalData}
-					margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-				>
-					<XAxis dataKey="date" tick={<CustomizedAxisTick />} />
-					<Legend verticalAlign={'top'} />
-					<YAxis domain={[0, 18000]} mirror={true} />
-					<CartesianGrid strokeDasharray="3 3" />
-					<Tooltip />
-					<Area
-						type="monotone"
-						dataKey="dailyInfected"
-						dot={false}
-						stroke="#FF0000"
-						fill="#FF0000"
-						activeDot={{ r: 8 }}
-					/>
-					<Area
-						type="monotone"
-						dataKey="newTests"
-						dot={false}
-						stroke="#ffa500"
-						fill="#ffa500"
-					/>
-				</AreaChart>
-			</ResponsiveContainer>
+			<h2>Testări vs. infectări (per zi)</h2>
+
+			<ReactEcharts
+              style={{
+                height: '500px',
+                width: '100%'
+              }}
+              option={ options }
+            //   theme={SUMMARY_CHART_THEME}
+            />
 		</React.Fragment>
 	);
 };

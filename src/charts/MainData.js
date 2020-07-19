@@ -1,16 +1,4 @@
 import React from 'react';
-import {
-	AreaChart,
-	Area,
-	XAxis,
-	YAxis,
-	CartesianGrid,
-	Tooltip,
-	Legend,
-	ResponsiveContainer
-} from 'recharts';
-import { CustomizedAxisTick } from './xtick';
-import echarts from 'echarts'
 import ReactEcharts from 'echarts-for-react'
 
 const MainData = ({ finalData }) => {
@@ -100,7 +88,7 @@ const MainData = ({ finalData }) => {
 
 	return (
 		<React.Fragment>
-			<h2>Main data (totals)</h2>
+			<h2>Evoluție generală</h2>
 			<ReactEcharts
               style={{
                 height: '500px',

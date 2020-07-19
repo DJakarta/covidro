@@ -1,43 +1,78 @@
 import React from 'react';
-import {
-	AreaChart,
-	Area,
-	XAxis,
-	YAxis,
-	CartesianGrid,
-	Tooltip,
-	Legend,
-	ResponsiveContainer
-} from 'recharts';
-import { CustomizedAxisTick } from './xtick';
+import ReactEcharts from 'echarts-for-react'
 
 const Percentage = ({ finalData }) => {
+
+	const extractDataToList = (data) => {
+		const res = []
+		for (let i in finalData) {
+			res.push(finalData[i][data])
+		}
+		return res
+	}
+
+	const dates = extractDataToList('date')
+	const averageInfectedOfTested = extractDataToList('averageInfectedOfTested')
+
+	const options = {
+		tooltip: {
+			trigger: 'axis',
+			axisPointer: {
+				label: {
+					backgroundColor: '#6a7985'
+				}
+			}
+		},
+		legend: {
+			data: [ 'Procentaj' ]
+		},
+		grid: {
+			left: '3%',
+			right: '4%',
+			bottom: '3%',
+			containLabel: true
+		},
+		xAxis: {
+			type: 'category',
+			data: dates,
+			axisLabel: {
+				color: 'gray',
+				fontWeight: 'bold',
+				rotate: 90,
+				interval: 6,
+			},
+		 },
+		yAxis: {
+			type: 'value',
+			axisLabel: {
+				color: 'gray',
+				inside: true
+			},
+		},
+		series: [
+			{
+				name: 'Procentaj',
+				type: 'line',
+				smooth: true,
+				data: averageInfectedOfTested,
+				areaStyle: {},
+				symbol: 'none',
+				color: '#FF0000'
+			},
+		]
+	};
+
 	return (
 		<React.Fragment>
-			<h2>Percentage of infected people relative to tested</h2>
-			<ResponsiveContainer width="99%" aspect={3}>
-				<AreaChart
-					style={{ margin: '6rem auto' }}
-					width={1400}
-					height={600}
-					data={finalData}
-					margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-				>
-					<XAxis dataKey="date" tick={<CustomizedAxisTick />} />
-					<Legend verticalAlign={'top'} />
-					<YAxis domain={[0, 55]} mirror={true} />
-					<CartesianGrid strokeDasharray="3 3" />
-					<Tooltip />
-					<Area
-						type="monotone"
-						dataKey="averageInfectedOfTested"
-						dot={false}
-						stroke="#FF0000"
-						fill="#FF0000"
-						activeDot={{ r: 8 }}
-					/>
-				</AreaChart>
-			</ResponsiveContainer>
+			<h2>Procentaj de infectați din persoane testate (zilnic)</h2>
+			<ReactEcharts
+              style={{
+                height: '500px',
+                width: '100%'
+              }}
+              option={ options }
+            //   theme={SUMMARY_CHART_THEME}
+            />
 		</React.Fragment>
 	);
 };
