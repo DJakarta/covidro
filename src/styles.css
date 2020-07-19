@@ -1,0 +1,77 @@
+.App {
+	font-family: sans-serif;
+	text-align: center;
+}
+
+.tabbed {
+	position: relative;
+	height: 100%;
+}
+
+.fullheight {
+	height: 81.1vh !important;
+	position: relative;
+	top: 0;
+	clear: both;
+}
+
+.halfheight {
+	height: 55vh !important;
+}
+
+.quickview {
+	height: 28.3vh;
+	background-color: #f1f8ff;
+	width: 800px;
+}
+
+.currentAmount {
+	background-color: #f1fff7 !important;
+}
+
+.tabbed .bottom.attached.menu {
+	width: 100% !important;
+	overflow: hidden;
+	margin-top: auto;
+	bottom: 0;
+}
+
+.mt2 {
+	margin-top: 2rem !important;
+}
+
+.ml1 {
+	margin-right: 1rem !important;
+}
+
+.mr1 {
+	margin-right: 1rem !important;
+}
+
+.ml2 {
+	margin-left: 2rem !important;
+}
+
+.ml3 {
+	margin-left: 3rem !important;
+}
+
+.mr2 {
+	margin-right: 2rem !important;
+}
+
+.pt1 {
+	padding-top: 1rem !important;
+}
+
+.pb1 {
+	padding-bottom: 1rem !important;
+}
+
+.pt2 {
+	padding-top: 2rem !important;
+}
+
+.pb2 {
+	padding-bottom: 2rem !important;
+}
