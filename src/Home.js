@@ -11,19 +11,19 @@ import axios from 'axios';
 
 const Home = () => {
 	// to test fetch
-	const apiData =
-		'https://code4rocoviz19api-demo.azurewebsites.net/api/v2/data';
-	const [data, setData] = useState([]);
+	// const apiData =
+	// 	'https://code4rocoviz19api-demo.azurewebsites.net/api/v2/data';
+	// const [data, setData] = useState([]);
 
-	useEffect(() => {
-		const fetchData = async () => {
-			const result = await axios(apiData);
-			setData(result.data);
-		};
-		fetchData();
-	}, []);
+	// useEffect(() => {
+	// 	const fetchData = async () => {
+	// 		const result = await axios(apiData);
+	// 		setData(result.data);
+	// 	};
+	// 	fetchData();
+	// }, []);
 
-	console.log(data);
+	// console.log(data);
 
 	const normalizeList = (data) => {
 		const res = [];
