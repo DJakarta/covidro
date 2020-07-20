@@ -4,6 +4,10 @@ import ReactEcharts from 'echarts-for-react';
 import { initialData } from '../data/data';
 import { mnemonics } from '../data/mnemonics';
 import Moment from 'react-moment';
+import echarts from 'echarts';
+import map from './../data/roGeo.json';
+
+echarts.registerMap('RO', map);
 
 const Summary = ({ finalData }) => {
 	const today = finalData[finalData.length - 1];
@@ -56,21 +60,28 @@ const Summary = ({ finalData }) => {
 					name: 'Cazuri',
 					type: 'map',
 					mapType: 'RO',
+					roam: false,
 					itemStyle: {
 						areaColor: curedColor
 					},
-					emphasis: {
-						label: {
-							show: false
+					label: {
+						normal: {
+							show: true
+						},
+						emphasis: {
+							show: true
 						}
 					},
-					data
+					emphasis: {
+						label: {
+							show: true
+						}
+					},
+					data: data
 				}
 			]
 		};
 	};
-
-	const chartOptions = getChartOptions(counties);
 
 	return (
 		<Grid columns={2} divided>
@@ -123,9 +134,10 @@ const Summary = ({ finalData }) => {
 			</Grid.Column>
 			<Grid.Row>
 				<ReactEcharts
-					option={chartOptions}
-					style={{ height: '400px' }}
+					option={ getChartOptions(counties) }
+					style={{ width: '1200%', height: '800%' }}
 					className="react_for_echarts"
+					opts={{renderer: 'svg'}}
 				/>
 			</Grid.Row>
 		</Grid>
