@@ -66,11 +66,12 @@ const Summary = ({ finalData }) => {
 					},
 					label: {
 						normal: {
-							show: true
+							show: true,
+							formatter: (item) => ( item.data.county )
 						},
 						emphasis: {
-							show: true
-						}
+							show: false
+						},
 					},
 					emphasis: {
 						label: {
@@ -84,7 +85,7 @@ const Summary = ({ finalData }) => {
 	};
 
 	return (
-		<Grid columns={2} divided>
+		<Grid columns={2} divided stackable>
 			<Grid.Column>
 				<Header as="h2" textAlign="center">
 					Cifrele de azi,{' '}
@@ -135,7 +136,7 @@ const Summary = ({ finalData }) => {
 			<Grid.Row>
 				<ReactEcharts
 					option={ getChartOptions(counties) }
-					style={{ width: '1200%', height: '800%' }}
+					style={{ width: '100%', minHeight: '400px' }}
 					className="react_for_echarts"
 					opts={{renderer: 'svg'}}
 				/>
