@@ -573,5 +573,60 @@ export const tests = [
 		date: '2020-07-09',
 		newTests: '13179',
 		totalTests: '796518'
-	}
+	},
+	{
+		date: '2020-07-10',
+		newTests: '14680',
+		totalTests: '811198'
+	},
+	{
+		date: '2020-07-11',
+		newTests: '14610',
+		totalTests: '825808'
+	},
+	{
+		date: '2020-07-12',
+		newTests: '8633',
+		totalTests: '834441'
+	},
+	{
+		date: '2020-07-13',
+		newTests: '6655',
+		totalTests: '841096'
+	},
+	{
+		date: '2020-07-14',
+		newTests: '14237',
+		totalTests: '855333'
+	},
+	{
+		date: '2020-07-15',
+		newTests: '18440',
+		totalTests: '873773'
+	},
+	{
+		date: '2020-07-16',
+		newTests: '19097',
+		totalTests: '892870'
+	},
+	{
+		date: '2020-07-17',
+		newTests: '18986',
+		totalTests: '911856'
+	},
+	{
+		date: '2020-07-18',
+		newTests: '18732',
+		totalTests: '930588'
+	},
+	{
+		date: '2020-07-19',
+		newTests: '13179',
+		totalTests: '943767'
+	},
+	{
+		date: '2020-07-20',
+		newTests: '8570',
+		totalTests: '952337'
+	},
 ];
