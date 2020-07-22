@@ -39,7 +39,7 @@ class Home extends Component {
 				el.tests = data[i].tests
 				list.push(el)
 			}
-			const trimmed = list.splice(19, list.length - 1)
+			const reversed = list.reverse()
 			const normalised = this.normaliseTests(list)
 			return normalised
 		})
@@ -49,38 +49,43 @@ class Home extends Component {
 		}).catch();
 	}
 
-	normaliseTests(data) {
-		const toAdd = [
-			{
-				"date":"2020-03-20",
-				"tests":3311,
-			},
-			{
-				"date":"2020-03-19",
-				"tests":303,
-			},
-			{
-				"date":"2020-03-18",
-				"tests":520,
-			},
-			{
-				"date":"2020-03-17",
-				"newTests":442,
-				"total_tests":4150
-			}
-		]
+	normaliseTests(trimmed) {
+		const data = trimmed.splice(19, trimmed.length - 1 )
 		const res = []
+		const missing = [
+			{
+				date: "2020-03-17",
+				newTests: 442,
+				totalTests: 4150
+			},
+			{
+				date: "2020-03-18",
+				newTests: 520,
+				totalTests: 4670
+			},
+			{
+				date: "2020-03-19",
+				newTests: 303,
+				totalTests: 4973
+			},
+			{
+				date: "2020-03-20",
+				newTests: 3311,
+				totalTests: 8284
+			},
+		]
+		
 		for (let i in data) {
-			const prevDay = data[i - 1] !== undefined ? data[i - 1].tests : 0
-			const prevDayTotal = res[i - 1] !== undefined ? res[i - 1].totalTests + prevDay: 0 + prevDay
-			const totalTests = prevDayTotal + data[i].tests
-			res.push({
-				newTests: data[i].tests,
-				totalTests: totalTests,
-				date: data[i].date
-			})
+			const prevDayTotal = missing[i - 1] !== undefined ? missing[i - 1].totalTests : 0
+			const prevDayFallback = res[i - 1] !== undefined ? res[i - 1].totalTests : 0
+			const todayTotal = missing[i - 1] !== undefined ? prevDayTotal + data[i].tests : prevDayFallback + data[i].tests
+			const el = {}
+			el.date = data[i].date
+			el.newTests = missing[i] !== undefined ? missing[i].newTests : data[i].tests
+			el.totalTests = missing[i] !== undefined ? missing[i].totalTests : todayTotal
+			res.push(el)
 		}
-		return res.reverse()
+		return res
 	}
 
 	normaliseList(data) {
@@ -135,7 +140,7 @@ class Home extends Component {
 
 	render() {
 
-		console.log(this.state.finalData)
+		console.log(axios.get('https://www.graphs.ro/json.php').then(res => console.log(res).catch(err => console.log(err))))
 
 		const Loading = () => (
 			<Dimmer active inverted>
