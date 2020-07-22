@@ -1,5 +1,5 @@
 # covidro.info
-A basic React experiment using public APIs or whatever CORS-free APIs I could find
+A basic React experiment using public APIs or whatever CORS-free APIs I could find.
 
 This project could probably be reused by whoever given that they have access to whatever working APIs might be available. The code is free to use.
 
