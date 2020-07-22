@@ -1,5 +1,5 @@
-import React, { useEffect, useState, Component } from 'react'
-import { Container, Header, Tab, Dimmer, Loader, Segment } from 'semantic-ui-react'
+import React, { Component } from 'react'
+import { Container, Header, Tab, Dimmer, Loader } from 'semantic-ui-react'
 import Summary from './charts/Summary'
 import AllData from './charts/AllData'
 import MainData from './charts/MainData'
@@ -39,7 +39,6 @@ class Home extends Component {
 				el.tests = data[i].tests
 				list.push(el)
 			}
-			const reversed = list.reverse()
 			const normalised = this.normaliseTests(list)
 			return normalised
 		})
@@ -139,8 +138,6 @@ class Home extends Component {
 	}
 
 	render() {
-
-		console.log(axios.get('https://www.graphs.ro/json.php').then(res => console.log(res).catch(err => console.log(err))))
 
 		const Loading = () => (
 			<Dimmer active inverted>
