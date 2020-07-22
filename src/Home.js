@@ -1,31 +1,89 @@
-import React, { useEffect, useState } from 'react';
-import { initialData } from './data/data';
-import { tests } from './data/tests';
-import { Container, Header, Tab } from 'semantic-ui-react';
-import Summary from './charts/Summary';
-import AllData from './charts/AllData';
-import MainData from './charts/MainData';
-import Percentage from './charts/Percentage';
-import { DailyInfected, DailyTestedInfected } from './charts/PerDay';
-import axios from 'axios';
+import React, { useEffect, useState, Component } from 'react'
+import { Container, Header, Tab, Dimmer, Loader, Segment } from 'semantic-ui-react'
+import Summary from './charts/Summary'
+import AllData from './charts/AllData'
+import MainData from './charts/MainData'
+import Percentage from './charts/Percentage'
+import { DailyInfected, DailyTestedInfected } from './charts/PerDay'
+import axios from 'axios'
+// import { initialData } from './data/data'
+// import { tests } from './data/tests'
 
-const Home = () => {
-	// to test fetch
-	// const apiData =
-	// 	'https://code4rocoviz19api-demo.azurewebsites.net/api/v2/data';
-	// const [data, setData] = useState([]);
+class Home extends Component {
 
-	// useEffect(() => {
-	// 	const fetchData = async () => {
-	// 		const result = await axios(apiData);
-	// 		setData(result.data);
-	// 	};
-	// 	fetchData();
-	// }, []);
+	constructor(props) {
+		super(props);
+		this.state = {
+			rawData: [],
+			testData: [],
+			finalData: [],
+			isLoading: true,
+		};
+		this.fetch()
+	}
 
-	// console.log(data);
+	async fetch() {
+		axios
+		.get('https://datelazi.ro/latestData.json')
+		.then( res => {
+			const normalised = this.normaliseList(res.data)
+			this.setState({ rawData: normalised })
+			return axios.get( 'https://www.iuliu.net/corona/data/romania.js', { responseType: 'text' })
+		})
+		.then(res => {
+			const data = JSON.parse(res.data.substring(21))
+			const list = []
+			for (let i in data) {
+				const el = {}
+				el.date = i.split("/").reverse().join("-")
+				el.tests = data[i].tests
+				list.push(el)
+			}
+			const trimmed = list.splice(19, list.length - 1)
+			const normalised = this.normaliseTests(list)
+			return normalised
+		})
+		.then(res => {
+			this.setState({ testData: res })
+			this.removeLoader()
+		}).catch();
+	}
 
-	const normalizeList = (data) => {
+	normaliseTests(data) {
+		const toAdd = [
+			{
+				"date":"2020-03-20",
+				"tests":3311,
+			},
+			{
+				"date":"2020-03-19",
+				"tests":303,
+			},
+			{
+				"date":"2020-03-18",
+				"tests":520,
+			},
+			{
+				"date":"2020-03-17",
+				"newTests":442,
+				"total_tests":4150
+			}
+		]
+		const res = []
+		for (let i in data) {
+			const prevDay = data[i - 1] !== undefined ? data[i - 1].tests : 0
+			const prevDayTotal = res[i - 1] !== undefined ? res[i - 1].totalTests + prevDay: 0 + prevDay
+			const totalTests = prevDayTotal + data[i].tests
+			res.push({
+				newTests: data[i].tests,
+				totalTests: totalTests,
+				date: data[i].date
+			})
+		}
+		return res.reverse()
+	}
+
+	normaliseList(data) {
 		const res = [];
 		const list = data.historicalData;
 		// push today's data
@@ -43,100 +101,116 @@ const Home = () => {
 				cured: list[i].numberCured
 			});
 		}
-		return res.reverse();
-	};
+		return res.reverse()
+	}
 
-	const addTestsToList = (list, tests) => {
-		const res = [];
+	addTestsToList(list, tests) {
+		const res = []
 		for (let i in list) {
 			const el = {};
 			for (let a in list[i]) {
 				el[a] = list[i][a];
 				const exists = tests[i] !== undefined;
-				const prevDay =
-					list[i - 1] !== undefined ? list[i - 1].totalInfected : 0;
+				const prevDay = list[i - 1] !== undefined ? list[i - 1].totalInfected : 0;
 				el.newTests = exists ? tests[i].newTests : 0;
 				el.totalTests = exists ? tests[i].totalTests : 0;
 				el.dailyInfected = list[i].totalInfected - prevDay;
 				el.averageInfectedOfTested = exists
-					? parseFloat((el.dailyInfected / el.newTests) * 100, 10).toFixed(
-							2
-					  )
-					: 0;
+					? parseFloat((el.dailyInfected / el.newTests) * 100, 10).toFixed(2)
+					: 0
 			}
-			res.push(el);
+			res.push(el)
 		}
-		return res;
-	};
+		this.setState({ finalData: res })
+	}
 
-	const normalisedData = normalizeList(initialData);
-	const finalData = addTestsToList(normalisedData, tests);
+	removeLoader() {
+		this.addTestsToList(this.state.rawData, this.state.testData)
+		this.setState({ isLoading: false })
+	} 
 
-	const tabs = [
-		{
-			menuItem: 'Sumar',
-			render: () => (
-				<Tab.Pane>
-					<Summary finalData={finalData} />
-				</Tab.Pane>
-			)
-		},
-		{
-			menuItem: 'Evoluție',
-			render: () => (
-				<Tab.Pane>
-					<MainData finalData={finalData} />
-				</Tab.Pane>
-			)
-		},
-		{
-			menuItem: 'Toate datele',
-			render: () => (
-				<Tab.Pane>
-					<AllData finalData={finalData} />
-				</Tab.Pane>
-			)
-		},
-		{
-			menuItem: 'Infectați per zi',
-			render: () => (
-				<Tab.Pane>
-					<DailyInfected finalData={finalData} />
-				</Tab.Pane>
-			)
-		},
-		{
-			menuItem: 'Infectați din testați per zi',
-			render: () => (
-				<Tab.Pane>
-					<DailyTestedInfected finalData={finalData} />
-				</Tab.Pane>
-			)
-		},
-		{
-			menuItem: 'Evoluție procentuală',
-			render: () => (
-				<Tab.Pane>
-					<Percentage finalData={finalData} />
-				</Tab.Pane>
-			)
-		}
-	];
+	componentDidMount() {
+		this.fetch()
+	}
 
-	return (
-		<Container className="mt2">
-			<Header as="h1">Statistici Covid România</Header>
-			<Tab
-				menu={{
-					fluid: true,
-					// vertical: true,
-					attached: true,
-					tabular: true
-				}}
-				panes={tabs}
-			/>
-		</Container>
-	);
-};
+	render() {
 
-export default Home;
+		console.log(this.state.finalData)
+
+		const Loading = () => (
+			<Dimmer active inverted>
+				<Loader inverted>Loading</Loader>
+			</Dimmer>
+		)
+
+		const tabs = [
+			{
+				menuItem: 'Sumar',
+				render: () => (
+					<Tab.Pane>
+						<Summary finalData={ this.state.finalData } />
+					</Tab.Pane>
+				)
+			},
+			{
+				menuItem: 'Evoluție',
+				render: () => (
+					<Tab.Pane>
+						<MainData finalData={ this.state.finalData } />
+					</Tab.Pane>
+				)
+			},
+			{
+				menuItem: 'Toate datele',
+				render: () => (
+					<Tab.Pane>
+						<AllData finalData={ this.state.finalData } />
+					</Tab.Pane>
+				)
+			},
+			{
+				menuItem: 'Infectați per zi',
+				render: () => (
+					<Tab.Pane>
+						<DailyInfected finalData={ this.state.finalData } />
+					</Tab.Pane>
+				)
+			},
+			{
+				menuItem: 'Infectați din testați per zi',
+				render: () => (
+					<Tab.Pane>
+						<DailyTestedInfected finalData={ this.state.finalData } />
+					</Tab.Pane>
+				)
+			},
+			{
+				menuItem: 'Evoluție procentuală',
+				render: () => (
+					<Tab.Pane>
+						<Percentage finalData={ this.state.finalData } />
+					</Tab.Pane>
+				)
+			}
+		]
+
+		return (
+			<Container className="mt2">
+				<Header as="h1">Statistici Covid România</Header>
+				{ this.state.isLoading ? <Loading /> :
+					<Tab
+						menu={{
+							fluid: true,
+							// vertical: true,
+							attached: true,
+							tabular: true
+						}}
+						panes={ tabs }
+					/>
+				}
+			</Container>
+		)
+	}
+}
+
+export default Home

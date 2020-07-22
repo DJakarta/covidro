@@ -18,6 +18,20 @@ const Summary = ({ finalData }) => {
 
 	const { countyInfectionsNumbers } = initialData.currentDayStats;
 
+	// const news = 'https://stirioficiale.ro/feeds/informatii.xml'
+	// const vids = 'https://stirioficiale.ro/feeds/video.xml'
+	// const legal = 'https://stirioficiale.ro/feeds/hotarari.xml'
+
+	// const parseRSS = (url) => {
+	// 	fetch(url)
+	// 	.then(res => res.data)
+	// 	.catch(err => console.log(err))
+	// 	// .then(data => console.log(data))
+	// }
+	// parseRSS("https://api.rss2json.com/v1/api.json?rss_url=" + news)
+	// parseRSS("https://api.rss2json.com/v1/api.json?rss_url=" + vids)
+	// parseRSS("https://api.rss2json.com/v1/api.json?rss_url=" + legal)
+
 	const counties = Object.entries(countyInfectionsNumbers)
 		.filter(([key]) => key !== '-')
 		.map(([key, entry]) => ({
