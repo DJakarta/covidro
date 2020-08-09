@@ -9,6 +9,8 @@ import axios from 'axios'
 // import { initialData } from './data/data'
 // import { tests } from './data/tests'
 
+// const api = 'https://datelazi.ro/latestData.json' || 'https://di5ds1eotmbx1.cloudfront.net/latestData.json'
+
 class Home extends Component {
 
 	constructor(props) {
@@ -24,7 +26,7 @@ class Home extends Component {
 
 	async fetch() {
 		axios
-		.get('https://datelazi.ro/latestData.json')
+		.get('https://di5ds1eotmbx1.cloudfront.net/latestData.json')
 		.then( res => {
 			const normalised = this.normaliseList(res.data)
 			this.setState({ rawData: normalised })
@@ -49,7 +51,8 @@ class Home extends Component {
 	}
 
 	normaliseTests(trimmed) {
-		const data = trimmed.splice(19, trimmed.length - 1 )
+		const data = trimmed
+		.splice( 19, trimmed.length - 1 )
 		const res = []
 		const missing = [
 			{
@@ -138,6 +141,8 @@ class Home extends Component {
 	}
 
 	render() {
+
+		// console.log(axios.get('https://www.graphs.ro/json.php', { responseType: 'text' }).then(res => console.log(res)))
 
 		const Loading = () => (
 			<Dimmer active inverted>
