@@ -1,18 +1,26 @@
 import React from 'react';
 import ReactEcharts from 'echarts-for-react'
 
-const Percentage = ({ finalData }) => {
-
-	const extractDataToList = (data) => {
+const Percentage = ({ data }) => {
+	
+	const extractDataToList = (arg, from, more) => {
 		const res = []
-		for (let i in finalData) {
-			res.push(finalData[i][data])
+		for (let i in data) {
+			if (arg === 'date') {
+				res.push(data[i][arg])	
+			} else {
+				if (more) {
+					res.push(data[i][from][more][arg])
+				} else {
+					res.push(data[i][from][arg])
+				}
+			}
 		}
 		return res
 	}
 
 	const dates = extractDataToList('date')
-	const averageInfectedOfTested = extractDataToList('averageInfectedOfTested')
+	const averageInfectedOfTested = extractDataToList('averageInfectedOfTested', 'day')
 
 	const options = {
 		tooltip: {

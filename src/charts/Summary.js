@@ -1,7 +1,6 @@
 import React from 'react';
 import { Grid, Statistic, Header } from 'semantic-ui-react';
 import ReactEcharts from 'echarts-for-react';
-import { initialData } from '../data/data';
 import { mnemonics } from '../data/mnemonics';
 import Moment from 'react-moment';
 import echarts from 'echarts';
@@ -9,14 +8,13 @@ import map from './../data/roGeo.json';
 
 echarts.registerMap('RO', map);
 
-const Summary = ({ finalData }) => {
-	const today = finalData[finalData.length - 1];
-	const prevDay = finalData[finalData.length - 2];
+const Summary = ({ data }) => {
+	const today = data[data.length - 1];
 	const countyLowestColor = '#FFFF66';
 	const countyHighestColor = '#DC143C';
 	const curedColor = '#65E0E0';
 
-	const { countyInfectionsNumbers } = initialData.currentDayStats;
+	const countyInfectionsNumbers = today.distribution.county
 
 	// const news = 'https://stirioficiale.ro/feeds/informatii.xml'
 	// const vids = 'https://stirioficiale.ro/feeds/video.xml'
@@ -108,22 +106,22 @@ const Summary = ({ finalData }) => {
 				<Statistic.Group size={'small'} widths="four">
 					<Statistic color="grey">
 						<Statistic.Label>Testați</Statistic.Label>
-						<Statistic.Value>{today.newTests}</Statistic.Value>
+						<Statistic.Value>{today.day.tests.total}</Statistic.Value>
 					</Statistic>
 					<Statistic color="red">
 						<Statistic.Label>Cazuri noi</Statistic.Label>
-						<Statistic.Value>{today.dailyInfected}</Statistic.Value>
+						<Statistic.Value>{today.day.cases}</Statistic.Value>
 					</Statistic>
 					<Statistic color="green">
 						<Statistic.Label>Vindecați</Statistic.Label>
 						<Statistic.Value>
-							{today.cured - prevDay.cured}
+							{today.day.recovered}
 						</Statistic.Value>
 					</Statistic>
 					<Statistic color="black">
 						<Statistic.Label>Decedați</Statistic.Label>
 						<Statistic.Value>
-							{today.deceased - prevDay.deceased}
+							{today.day.deceased}
 						</Statistic.Value>
 					</Statistic>
 				</Statistic.Group>
@@ -135,15 +133,15 @@ const Summary = ({ finalData }) => {
 				<Statistic.Group size={'small'} widths="three">
 					<Statistic color="red">
 						<Statistic.Label>Cazuri</Statistic.Label>
-						<Statistic.Value>{today.totalInfected}</Statistic.Value>
+						<Statistic.Value>{today.total.cases}</Statistic.Value>
 					</Statistic>
 					<Statistic color="green">
 						<Statistic.Label>Vindecați</Statistic.Label>
-						<Statistic.Value>{today.cured}</Statistic.Value>
+						<Statistic.Value>{today.total.recovered}</Statistic.Value>
 					</Statistic>
 					<Statistic color="black">
 						<Statistic.Label>Decedați</Statistic.Label>
-						<Statistic.Value>{today.deceased}</Statistic.Value>
+						<Statistic.Value>{today.total.deceased}</Statistic.Value>
 					</Statistic>
 				</Statistic.Group>
 			</Grid.Column>

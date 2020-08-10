@@ -1,22 +1,31 @@
 import React from 'react';
 import ReactEcharts from 'echarts-for-react'
 
-const AllData = ({ finalData }) => {
-	const extractDataToList = (data) => {
+const AllData = ({ data }) => {
+	
+	const extractDataToList = (arg, from, more) => {
 		const res = []
-		for (let i in finalData) {
-			res.push(finalData[i][data])
+		for (let i in data) {
+			if (arg === 'date') {
+				res.push(data[i][arg])	
+			} else {
+				if (more) {
+					res.push(data[i][from][more][arg])
+				} else {
+					res.push(data[i][from][arg])
+				}
+			}
 		}
 		return res
 	}
 
 	const dates = extractDataToList('date')
-	const totalInfected = extractDataToList('totalInfected')
-	const cured = extractDataToList('cured')
-	const deceased = extractDataToList('deceased')
-	const totalTests = extractDataToList('totalTests')
-	const newTests = extractDataToList('newTests')
-	const dailyInfected = extractDataToList('dailyInfected')
+	const totalInfected = extractDataToList('cases', 'total')
+	const cured = extractDataToList('recovered', 'total')
+	const deceased = extractDataToList('deceased', 'total')
+	const totalTests = extractDataToList('tests', 'total')
+	const newTests = extractDataToList('total', 'day', 'tests')
+	const dailyInfected = extractDataToList('cases', 'day')
 
 	const options = {
 		tooltip: {

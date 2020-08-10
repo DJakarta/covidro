@@ -1,19 +1,23 @@
 import React from 'react';
 import ReactEcharts from 'echarts-for-react'
 
-const MainData = ({ finalData }) => {
+const MainData = ({ data }) => {
 
-	const extractDataToList = (data) => {
+	const extractDataToList = (arg) => {
 		const res = []
-		for (let i in finalData) {
-			res.push(finalData[i][data])
+		for (let i in data) {
+			if (arg === 'date') {
+				res.push(data[i][arg])	
+			} else {
+				res.push(data[i]['total'][arg])
+			}
 		}
 		return res
 	}
 
 	const dates = extractDataToList('date')
-	const totalInfected = extractDataToList('totalInfected')
-	const cured = extractDataToList('cured')
+	const totalInfected = extractDataToList('cases')
+	const cured = extractDataToList('recovered')
 	const deceased = extractDataToList('deceased')
 
 	const options = {

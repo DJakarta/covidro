@@ -1,19 +1,27 @@
 import React from 'react';
 import ReactEcharts from 'echarts-for-react'
 
-export const DailyInfected = ({ finalData }) => {
-
-	const extractDataToList = (data) => {
-		const res = []
-		for (let i in finalData) {
-			res.push(finalData[i][data])
+const extractDataToList = (arg, from, more, data) => {
+	const res = []
+	for (let i in data) {
+		if (arg === 'date') {
+			res.push(data[i][arg])	
+		} else {
+			if (more) {
+				res.push(data[i][from][more][arg])
+			} else {
+				res.push(data[i][from][arg])
+			}
 		}
-		return res
 	}
+	return res
+}
 
-	const dates = extractDataToList('date')
-	const dailyInfected = extractDataToList('dailyInfected')
-	const newTests = extractDataToList('newTests')
+export const DailyInfected = ({ data }) => {
+
+	const dates = extractDataToList('date', null, null, data)
+	const dailyInfected = extractDataToList('cases', 'day', null, data)
+	const newTests = extractDataToList('total', 'day', 'tests', data)
 
 	const options = {
 		tooltip: {
@@ -78,19 +86,11 @@ export const DailyInfected = ({ finalData }) => {
 	);
 };
 
-export const DailyTestedInfected = ({ finalData }) => {
+export const DailyTestedInfected = ({ data }) => {
 
-	const extractDataToList = (data) => {
-		const res = []
-		for (let i in finalData) {
-			res.push(finalData[i][data])
-		}
-		return res
-	}
-
-	const dates = extractDataToList('date')
-	const dailyInfected = extractDataToList('dailyInfected')
-	const newTests = extractDataToList('newTests')
+	const dates = extractDataToList('date', null, null, data)
+	const dailyInfected = extractDataToList('cases', 'day', null, data)
+	const newTests = extractDataToList('total', 'day', 'tests', data)
 
 	const options = {
 		tooltip: {
