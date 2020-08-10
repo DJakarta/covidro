@@ -10,6 +10,7 @@ import axios from 'axios'
 // import { tests } from './data/tests'
 
 // const api = 'https://datelazi.ro/latestData.json' || 'https://di5ds1eotmbx1.cloudfront.net/latestData.json'
+const API = 'http://localhost:4000/api'
 
 class Home extends Component {
 
@@ -142,7 +143,7 @@ class Home extends Component {
 
 	render() {
 
-		// console.log(axios.get('https://www.graphs.ro/json.php', { responseType: 'text' }).then(res => console.log(res)))
+		console.log(axios.get(API, { responseType: 'text' }).then(res => console.log(res.data[145])))
 
 		const Loading = () => (
 			<Dimmer active inverted>
