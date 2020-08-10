@@ -25,7 +25,7 @@ class Home extends Component {
 			const data = res.data
 			this.setState({ data: data, isLoading: false })
 		})
-		.catch(err => console.log(err))
+		.catch()
 	}
 
 	componentDidMount() {

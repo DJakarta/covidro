@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Statistic, Header } from 'semantic-ui-react';
+import { Grid, Statistic, Header, Segment, Icon, Label } from 'semantic-ui-react';
 import ReactEcharts from 'echarts-for-react';
 import { mnemonics } from '../data/mnemonics';
 import Moment from 'react-moment';
@@ -8,8 +8,44 @@ import map from './../data/roGeo.json';
 
 echarts.registerMap('RO', map);
 
+const VariationIcon = ({ today, prevDay, inversed }) => {
+	const t = parseFloat(today)
+	const y = parseFloat(prevDay)
+	const inv = inversed === true ? true : false
+	const anyNull = ( t === null || y === null ) ? true : false
+	const color = ( t > y ) ? 'green' : ( t < y ) ? 'red' : 'grey'
+	const colorInverse = ( t > y ) ? 'red' : ( t < y ) ? 'green' : 'grey'
+	const icon = ( t > y ) ? 'arrow up' : ( t < y ) ? 'arrow down' : 'pause'
+
+	return (
+		<div className='variation'>
+			<Label circular color={ anyNull ? 'grey' : inv ? colorInverse : color }>
+				<Icon name={ anyNull ? 'pause' : icon }></Icon>
+			</Label>
+		</div>
+	)
+}
+
+const Stat = ({ name, today, prevDay, size, inversed }) => {
+	const color = name === 'Testați' ? 'grey' : name === 'Cazuri noi' ? 'red' : name === 'Vindecați' ? 'green' : 'black'
+	return (
+		<Grid.Column width={ size }>
+			<div className='stat'>
+				<VariationIcon inversed={ inversed } today={ today } prevDay={ prevDay } />
+				<div className='data'>
+					<Statistic color={ color } size={'tiny'}>
+						<Statistic.Value>{ today === null ? '-' : today }</Statistic.Value>
+					</Statistic>
+					<span className='mini-header'>{ name }</span>
+				</div>
+			</div>
+		</Grid.Column>
+	)
+}
+
 const Summary = ({ data }) => {
 	const today = data[data.length - 1];
+	const prevDay = data[data.length - 2]
 	const countyLowestColor = '#FFFF66';
 	const countyHighestColor = '#DC143C';
 	const curedColor = '#65E0E0';
@@ -96,54 +132,63 @@ const Summary = ({ data }) => {
 		};
 	};
 
+	console.log(today)
+
 	return (
-		<Grid columns={2} divided stackable>
-			<Grid.Column>
-				<Header as="h2" textAlign="center">
-					Cifrele de azi,{' '}
+		<Grid divided stackable className='dashboard'>
+			<Grid.Column width={12}>
+				<Header as="h2">
+					Azi,{' '}
 					<Moment format="DD MMM YYYY">{today.date}</Moment>
 				</Header>
-				<Statistic.Group size={'small'} widths="four">
-					<Statistic color="grey">
-						<Statistic.Label>Testați</Statistic.Label>
-						<Statistic.Value>{today.day.tests.total}</Statistic.Value>
-					</Statistic>
-					<Statistic color="red">
-						<Statistic.Label>Cazuri noi</Statistic.Label>
-						<Statistic.Value>{today.day.cases}</Statistic.Value>
-					</Statistic>
-					<Statistic color="green">
-						<Statistic.Label>Vindecați</Statistic.Label>
-						<Statistic.Value>
-							{today.day.recovered}
-						</Statistic.Value>
-					</Statistic>
-					<Statistic color="black">
-						<Statistic.Label>Decedați</Statistic.Label>
-						<Statistic.Value>
-							{today.day.deceased}
-						</Statistic.Value>
-					</Statistic>
-				</Statistic.Group>
+				<Grid stackable className='stats' columns={4}>
+					<Stat name={'Testați total'} today={ today.day.tests.total } prevDay={ prevDay.day.tests.total } />
+					<Stat name={'Cazuri noi'} today={ today.day.cases } prevDay={ prevDay.day.cases } inversed={ true } />
+					<Stat name={'Vindecați'} today={ today.day.recovered } prevDay={ prevDay.day.recovered } />
+					<Stat name={'Decedați'} today={ today.day.deceased } prevDay={ prevDay.day.deceased } inversed={ true } />
+				</Grid>
+				<Header as="h3">Teste</Header>
+				<Grid stackable className='stats' columns={3}>
+					<Stat name={'Total azi'} today={ today.day.tests.total } prevDay={ prevDay.day.tests.total } />
+					<Stat name={'Instituțional'} today={ today.day.tests.institutional } prevDay={ prevDay.day.tests.institutional } inversed={true}/>
+					<Stat name={'La cerere'} today={ today.day.tests.onRequest } prevDay={ prevDay.day.tests.onRequest } inversed={true}/>
+					<Stat name={'Cazuri noi din testări %'} today={ today.day.averageInfectedOfTested } prevDay={ prevDay.day.averageInfectedOfTested } inversed={true}/>
+					<Stat name={'Retestări pozitive'} today={ today.day.tests.retestsPositive } prevDay={ prevDay.day.tests.retestsPositive } inversed={true}/>
+					<Stat name={'Neraportate anterior'} today={ today.day.tests.prevUnreported } prevDay={ prevDay.day.tests.prevUnreported }/>
+				</Grid>
+				<Header as="h3">Spitalizare / Izolare / Carantină</Header>
+				<Grid stackable className='stats'>
+					<Grid.Row columns={2}>
+						<Stat name={'Persoane internate'} today={ today.day.commited } prevDay={ prevDay.day.commited } inversed={true}/>
+						<Stat name={'Interate la ATI'} today={ today.pending.icu } prevDay={ prevDay.pending.icu } inversed={true}/>
+					</Grid.Row>
+					<Grid.Row columns={3}>
+						<Stat name={'Total în carantină'} today={ today.day.quarantined } prevDay={ prevDay.day.quarantined } inversed={true}/>
+						<Stat name={'Carantină instituțională'} today={ today.pending.quarantinedInstitutional } prevDay={ prevDay.pending.quarantinedInstitutional } inversed={true}/>
+						<Stat name={'Carantină la domiciliu'} today={ today.pending.quarantinedHome } prevDay={ prevDay.pending.quarantinedHome } inversed={true}/>
+					</Grid.Row>
+					<Grid.Row columns={3}>
+						<Stat name={'Total în izolare'} today={ today.day.isolated } prevDay={ prevDay.day.isolated } inversed={true}/>
+						<Stat name={'Izolare instituțională'} today={ today.pending.isolatedInstitutional } prevDay={ prevDay.pending.isolatedInstitutional } inversed={true}/>
+						<Stat name={'Izolare la domiciliu'} today={ today.pending.isolatedHome } prevDay={ prevDay.pending.isolatedHome } inversed={true}/>
+					</Grid.Row>
+				</Grid>
+				<Header as="h3">Altele</Header>
+				<Grid stackable className='stats' columns={3}>
+					<Stat name={'Apeluri 112'} today={ today.day.callsEmergency } prevDay={ prevDay.day.callsEmergency } inversed={true}/>
+					<Stat name={'Apeluri infoline'} today={ today.day.callsInfo } prevDay={ prevDay.day.callsInfo } />
+				</Grid>
 			</Grid.Column>
-			<Grid.Column>
-				<Header as="h2" textAlign="center">
+			<Grid.Column width={4} className='summary-side'>
+				<Header as="h2">
 					Total
 				</Header>
-				<Statistic.Group size={'small'} widths="three">
-					<Statistic color="red">
-						<Statistic.Label>Cazuri</Statistic.Label>
-						<Statistic.Value>{today.total.cases}</Statistic.Value>
-					</Statistic>
-					<Statistic color="green">
-						<Statistic.Label>Vindecați</Statistic.Label>
-						<Statistic.Value>{today.total.recovered}</Statistic.Value>
-					</Statistic>
-					<Statistic color="black">
-						<Statistic.Label>Decedați</Statistic.Label>
-						<Statistic.Value>{today.total.deceased}</Statistic.Value>
-					</Statistic>
-				</Statistic.Group>
+				<Grid stackable className='stats'>
+					<Stat name={'Cazuri'} today={ today.total.cases } prevDay={ prevDay.total.cases } size={16} inversed={ true } />
+					<Stat name={'Vindecați'} today={ today.total.recovered } prevDay={ prevDay.total.recovered } size={16} />
+					<Stat name={'Decedați'} today={ today.total.deceased } prevDay={ prevDay.total.deceased } size={16} inversed={ true } />
+					<Stat name={'Testați'} today={ today.total.tests } prevDay={ prevDay.total.tests } size={16} />
+				</Grid>
 			</Grid.Column>
 			<Grid.Row>
 				<ReactEcharts
