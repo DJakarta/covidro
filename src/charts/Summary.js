@@ -132,8 +132,6 @@ const Summary = ({ data }) => {
 		};
 	};
 
-	console.log(today)
-
 	return (
 		<Grid divided stackable className='dashboard'>
 			<Grid.Column width={12}>
