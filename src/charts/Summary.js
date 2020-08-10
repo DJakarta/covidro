@@ -26,15 +26,18 @@ const VariationIcon = ({ today, prevDay, inversed }) => {
 	)
 }
 
-const Stat = ({ name, today, prevDay, size, inversed }) => {
+const Stat = ({ name, today, prevDay, size, inversed, pctg, background }) => {
 	const color = name === 'Testați' ? 'grey' : name === 'Cazuri noi' ? 'red' : name === 'Vindecați' ? 'green' : 'black'
+	const numbs = (number) => {
+		return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+	}
 	return (
 		<Grid.Column width={ size }>
-			<div className='stat'>
+			<div className={ background ? 'stat ' + background : 'stat' }>
 				<VariationIcon inversed={ inversed } today={ today } prevDay={ prevDay } />
 				<div className='data'>
 					<Statistic color={ color } size={'tiny'}>
-						<Statistic.Value>{ today === null ? '-' : today }</Statistic.Value>
+						<Statistic.Value>{ today === null ? '-' : pctg === true ? today + '%' : numbs(today) }</Statistic.Value>
 					</Statistic>
 					<span className='mini-header'>{ name }</span>
 				</div>
@@ -140,17 +143,17 @@ const Summary = ({ data }) => {
 					<Moment format="DD MMM YYYY">{today.date}</Moment>
 				</Header>
 				<Grid stackable className='stats' columns={4}>
-					<Stat name={'Testați total'} today={ today.day.tests.total } prevDay={ prevDay.day.tests.total } />
-					<Stat name={'Cazuri noi'} today={ today.day.cases } prevDay={ prevDay.day.cases } inversed={ true } />
-					<Stat name={'Vindecați'} today={ today.day.recovered } prevDay={ prevDay.day.recovered } />
-					<Stat name={'Decedați'} today={ today.day.deceased } prevDay={ prevDay.day.deceased } inversed={ true } />
+					<Stat name={'Testați total'} today={ today.day.tests.total } prevDay={ prevDay.day.tests.total } background={'bg-grey'} />
+					<Stat name={'Cazuri noi'} today={ today.day.cases } prevDay={ prevDay.day.cases } inversed={ true } background={'bg-red'} />
+					<Stat name={'Vindecați'} today={ today.day.recovered } prevDay={ prevDay.day.recovered } background={'bg-green'} />
+					<Stat name={'Decedați'} today={ today.day.deceased } prevDay={ prevDay.day.deceased } inversed={ true } background={'bg-black'} />
 				</Grid>
 				<Header as="h3">Teste</Header>
 				<Grid stackable className='stats' columns={3}>
 					<Stat name={'Total azi'} today={ today.day.tests.total } prevDay={ prevDay.day.tests.total } />
 					<Stat name={'Instituțional'} today={ today.day.tests.institutional } prevDay={ prevDay.day.tests.institutional } inversed={true}/>
 					<Stat name={'La cerere'} today={ today.day.tests.onRequest } prevDay={ prevDay.day.tests.onRequest } inversed={true}/>
-					<Stat name={'Cazuri noi din testări %'} today={ today.day.averageInfectedOfTested } prevDay={ prevDay.day.averageInfectedOfTested } inversed={true}/>
+					<Stat name={'Cazuri noi din testări %'} today={ today.day.averageInfectedOfTested } prevDay={ prevDay.day.averageInfectedOfTested } inversed={true} pctg={true}/>
 					<Stat name={'Retestări pozitive'} today={ today.day.tests.retestsPositive } prevDay={ prevDay.day.tests.retestsPositive } inversed={true}/>
 					<Stat name={'Neraportate anterior'} today={ today.day.tests.prevUnreported } prevDay={ prevDay.day.tests.prevUnreported }/>
 				</Grid>
@@ -182,10 +185,10 @@ const Summary = ({ data }) => {
 					Total
 				</Header>
 				<Grid stackable className='stats'>
-					<Stat name={'Cazuri'} today={ today.total.cases } prevDay={ prevDay.total.cases } size={16} inversed={ true } />
-					<Stat name={'Vindecați'} today={ today.total.recovered } prevDay={ prevDay.total.recovered } size={16} />
-					<Stat name={'Decedați'} today={ today.total.deceased } prevDay={ prevDay.total.deceased } size={16} inversed={ true } />
-					<Stat name={'Testați'} today={ today.total.tests } prevDay={ prevDay.total.tests } size={16} />
+					<Stat name={'Cazuri'} today={ today.total.cases } prevDay={ prevDay.total.cases } size={16} inversed={ true } background={'bg-red'} />
+					<Stat name={'Vindecați'} today={ today.total.recovered } prevDay={ prevDay.total.recovered } size={16} background={'bg-green'} />
+					<Stat name={'Decedați'} today={ today.total.deceased } prevDay={ prevDay.total.deceased } size={16} inversed={ true } background={'bg-black'} />
+					<Stat name={'Testați'} today={ today.total.tests } prevDay={ prevDay.total.tests } size={16} background={'bg-grey'} />
 				</Grid>
 			</Grid.Column>
 			<Grid.Row>

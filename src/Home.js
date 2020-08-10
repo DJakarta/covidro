@@ -94,7 +94,7 @@ class Home extends Component {
 		]
 
 		return (
-			<Container className="mt2">
+			<Container className="mt2 mb2">
 				<Header as="h1">Statistici Covid România</Header>
 				{ this.state.isLoading ? <Loading /> :
 					<Tab
