@@ -31,6 +31,7 @@ const Stat = ({ name, today, prevDay, size, inversed, pctg, background }) => {
 	const numbs = (number) => {
 		return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
 	}
+	
 	return (
 		<Grid.Column width={ size }>
 			<div className={ background ? 'stat ' + background : 'stat' }>
