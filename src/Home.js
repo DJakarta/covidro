@@ -23,7 +23,6 @@ class Home extends Component {
 	async getData() {
 		axios.get(API, {
 		  }).then(res => {
-			  console.log(res)
 			const data = res.data
 			this.setState({ data: data, isLoading: false })
 		})
