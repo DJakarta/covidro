@@ -7,7 +7,7 @@ import Percentage from './charts/Percentage'
 import { DailyInfected, DailyTestedInfected } from './charts/PerDay'
 import axios from 'axios'
 
-const API = 'http://localhost:4000/api'
+const API = 'http://127.0.0.1:4000/api'
 
 class Home extends Component {
 
@@ -21,7 +21,9 @@ class Home extends Component {
 	}
 
 	async getData() {
-		axios.get(API, { responseType: 'text' }).then(res => {
+		axios.get(API, {
+		  }).then(res => {
+			  console.log(res)
 			const data = res.data
 			this.setState({ data: data, isLoading: false })
 		})
