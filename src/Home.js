@@ -22,6 +22,9 @@ class Home extends Component {
 
 	async getData() {
 		axios.get(API, {
+			headers: {
+				'Access-Control-Request-Headers': true
+			}
 		  }).then(res => {
 			const data = res.data
 			this.setState({ data: data, isLoading: false })
