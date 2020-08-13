@@ -8,10 +8,6 @@ app.use(cors())
 
 const port = process.env.PORT || 4000
 
-app.listen(port, () => {
-    console.log("Server running on port 4000");
-});
-
 const normaliseList = (data) => {
     const res = [];
     const list = data.historicalData;
@@ -118,4 +114,18 @@ app.get("/api", async (req, res, next) => {
     })
     .catch(err => console.log(err))
     res.json(data)
+});
+
+if (process.env.NODE_ENV === 'production') {
+    // Serve any static files
+    app.use(express.static(path.join(__dirname, 'client/build')));
+      
+    // Handle React routing, return all requests to React app
+    app.get('*', function(req, res) {
+        res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+    });
+}
+
+app.listen(port, () => {
+    console.log("Server running on port 4000");
 });
