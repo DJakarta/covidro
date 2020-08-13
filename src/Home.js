@@ -7,7 +7,7 @@ import Percentage from './charts/Percentage'
 import { DailyInfected, DailyTestedInfected } from './charts/PerDay'
 import axios from 'axios'
 
-const API = 'http://127.0.0.1:4000/api'
+const API = 'http://localhost:4000/api/'
 
 class Home extends Component {
 
