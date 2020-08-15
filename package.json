@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "description": "",
     "keywords": [],
+    "proxy": "http://localhost:4000/",
     "main": "src/index.js",
     "dependencies": {
         "axios": "0.19.2",
@@ -27,13 +28,12 @@
     "scripts": {
         "start": "npm-run-all --parallel watch:server start:web",
         "start:web": "react-scripts start",
-        "start:server": "node src/server.js",
-        "watch:server": "nodemon --watch src/server.js src/server.js",
+        "start:server": "node server.js",
+        "watch:server": "nodemon --watch server.js server.js",
         "build": "react-scripts build",
         "test": "react-scripts test --env=jsdom",
         "eject": "react-scripts eject"
     },
-    "proxy": "http://localhost:4000/",
     "browserslist": [
         ">0.2%",
         "not dead",
