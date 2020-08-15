@@ -1,11 +1,6 @@
 {
     "name": "covidro",
     "version": 1,
-    "public": false,
-    "builds": [
-      { "src": "package.json", "use": "@vercel/static-build" },
-      { "src": "server.js", "use": "@vercel/node-server" }
-    ],
     "routes": [
       { "src": "/api/.*", "dest": "server.js" },
       { "src": "^/static/(.*)", "dest": "/static/$1" },
