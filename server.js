@@ -116,7 +116,11 @@ app.get("/api", async (req, res) => {
     })
     .catch(err => console.log(err))
     res.json(data)
-});
+})
+
+app.get("/api/test", async (req, res) => {
+    res.json({ test: 'test ok' })
+ })
 
 app.use(express.static(path.join(__dirname, 'build')));
 app.get('/*',(req, res)=>{
@@ -126,5 +130,3 @@ app.get('/*',(req, res)=>{
 app.listen(port, '0.0.0.0', () => {
     console.log("Server running on " + hostname + ':' + port);
 })
-
-console.log(process.env.HOST)
