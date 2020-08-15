@@ -5,10 +5,14 @@ const path = require('path')
 
 const app = express()
 const port = process.env.PORT || 4000
-const hostname = process.env.HOST || 'http://localhost'
+const hostname = process.env.HOST || '127.0.0.1'
 const prod = app.get('env') === 'production'
 
 app.use(cors())
+
+app.listen(port, () => {
+    console.log("Server running on " + hostname + ':' + port);
+})
 
 const normaliseList = (data) => {
     const res = [];
