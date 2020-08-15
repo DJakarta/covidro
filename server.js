@@ -5,10 +5,14 @@ const path = require('path')
 
 const app = express()
 const port = process.env.PORT || 4000
-const hostname = process.env.HOST || 'http://localhost'
+const hostname = process.env.HOST || '127.0.0.1'
 const prod = app.get('env') === 'production'
 
 app.use(cors())
+
+app.listen(port, () => {
+    console.log("Server running on " + hostname + ':' + port);
+})
 
 const normaliseList = (data) => {
     const res = [];
@@ -118,11 +122,7 @@ app.get("/api", async (req, res) => {
     res.json(data)
 })
 
-app.use(express.static(path.join(__dirname, 'build')));
-app.get('/*',(req, res)=>{
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
-})
-
-app.listen(port, '0.0.0.0', () => {
-    console.log("Server running on " + hostname + ':' + port);
-})
+app.use(express.static(path.join(__dirname, 'public')));
+// app.get('/*',(req, res)=>{
+//     res.sendFile(path.join(__dirname, 'public', 'index.html'));
+// })
