@@ -24,6 +24,7 @@ class Home extends Component {
 		axios.get(API, {
 		  }).then(res => {
 			const data = res.data
+			console.log(res)
 			this.setState({ data: data, isLoading: false })
 		})
 		.catch(err => console.log(err))

@@ -54,8 +54,6 @@ const Summary = ({ data }) => {
 	const countyHighestColor = '#DC143C';
 	const curedColor = '#65E0E0';
 
-	console.log('Summary, today: ', today)
-
 	const countyInfectionsNumbers = today.distribution.county
 
 	// const news = 'https://stirioficiale.ro/feeds/informatii.xml'

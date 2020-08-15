@@ -57,7 +57,7 @@ const consolidateData = (graphs, latest) => {
     return data
 }
 
-app.get("/api", async (req, res, next) => {
+app.get("/api/", async (req, res, next) => {
     const graphsAPI = 'https://www.graphs.ro/json.php'
     const latestAPI = 'https://di5ds1eotmbx1.cloudfront.net/latestData.json'
     const graphs = []
@@ -117,5 +117,5 @@ app.get("/api", async (req, res, next) => {
 });
 
 app.listen(port, hostname, () => {
-    console.log("Server running on port 4000 " + hostname + ', ' + port);
+    console.log("Server running on " + hostname + ':' + port);
 });
