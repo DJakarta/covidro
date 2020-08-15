@@ -5,7 +5,7 @@ const axios = require('axios')
 const app = express()
 const port = process.env.PORT || 4000
 const hostname = process.env.HOST || '127.0.0.1'
-const dev = app.get('env') !== 'production'
+const prod = app.get('env') === 'production'
 
 app.use(cors())
 
@@ -121,9 +121,9 @@ app.listen(port, hostname, () => {
     console.log("Server running on " + hostname + ':' + port);
 });
 
-if (!dev) {
-    app.use(express.static(path.join(__dirname, 'build')));
+if (prod) {
+    app.use(express.static(path.join(__dirname, 'client/build')));
     app.get('*',(req, res)=>{
-        res.sendFile(path.join(__dirname, 'build', 'index.html'));
+        res.sendFile(path.join(__dirname, 'client/build', 'client/build/index.html'));
     })
 }
