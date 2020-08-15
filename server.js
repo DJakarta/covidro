@@ -5,7 +5,7 @@ const path = require('path')
 
 const app = express()
 const port = process.env.PORT || 4000
-const hostname = process.env.HOST || '0.0.0.0'
+const hostname = process.env.HOST || 'http://localhost'
 const prod = app.get('env') === 'production'
 
 app.use(cors())
@@ -117,10 +117,6 @@ app.get("/api", async (req, res) => {
     .catch(err => console.log(err))
     res.json(data)
 })
-
-app.get("/api/test", async (req, res) => {
-    res.json({ test: 'test ok' })
- })
 
 app.use(express.static(path.join(__dirname, 'build')));
 app.get('/*',(req, res)=>{

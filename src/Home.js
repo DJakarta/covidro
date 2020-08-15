@@ -33,8 +33,6 @@ class Home extends Component {
 
 	render() {
 
-		console.log(axios.get('/api/test', { responseType: 'text' }).then(res => { const data = res.data; console.log(res, data.test) }))
-
 		const data = this.state.data
 
 		const Loading = () => (
