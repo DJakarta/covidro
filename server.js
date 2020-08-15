@@ -122,7 +122,8 @@ app.get("/api", async (req, res) => {
     res.json(data)
 })
 
-app.use(express.static(path.join(__dirname, 'public')));
-// app.get('/*',(req, res)=>{
-//     res.sendFile(path.join(__dirname, 'public', 'index.html'));
-// })
+app.use(express.static(path.join(__dirname, 'build')));
+
+app.listen(port, '0.0.0.0', () => {
+    console.log("Server running on " + hostname + ':' + port);
+})
