@@ -58,7 +58,7 @@ const consolidateData = (graphs, latest) => {
     return data
 }
 
-app.get("/api/", async (req, res, next) => {
+app.get("/api", async (req, res, next) => {
     const graphsAPI = 'https://www.graphs.ro/json.php'
     const latestAPI = 'https://di5ds1eotmbx1.cloudfront.net/latestData.json'
     const graphs = []
@@ -123,6 +123,7 @@ app.listen(port, hostname, () => {
 
 if (prod) {
     app.use(express.static(path.join(__dirname, 'build')));
+    console.log(express.static(path.join(__dirname, 'build')))
     app.get('*',(req, res)=>{
         res.sendFile(path.join(__dirname, 'build', 'index.html'));
     })
