@@ -7,8 +7,6 @@ import Percentage from './charts/Percentage'
 import { DailyInfected, DailyTestedInfected } from './charts/PerDay'
 import axios from 'axios'
 
-const API = '/api/'
-
 class Home extends Component {
 
 	constructor(props) {
@@ -21,7 +19,7 @@ class Home extends Component {
 	}
 
 	async getData() {
-		axios.get(API, {
+		axios.get('api/', {
 		  }).then(res => {
 			const data = res.data
 			console.log(res)
