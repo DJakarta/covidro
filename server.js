@@ -9,7 +9,6 @@ const hostname = process.env.HOST || '127.0.0.1'
 const prod = app.get('env') === 'production'
 
 app.use(cors())
-
 const normaliseList = (data) => {
     const res = [];
     const list = data.historicalData;
